@@ -51,8 +51,14 @@ class ColorController extends BaseController
 
         try {
             $colorModel = new ColorModel();
-            $colorModel->createColor($value);
-            $this->sendOutput(json_encode($value), array('Content-Type: application/json', HTTP_STATUS_200));
+            $isSuccessful = $colorModel->createColor($value);
+            if (!$isSuccessful) {
+                $strErrorDesc = 'Something went wrong! Please contact support.';
+                $strErrorHeader = HTTP_ERROR_500;
+                $this->sendOutput(json_encode(array('error' => $strErrorDesc)), array('Content-Type: application/json', $strErrorHeader));    
+            } else {
+                $this->sendOutput(json_encode($value), array('Content-Type: application/json', HTTP_STATUS_200));
+            }
         } catch (Error $e) {
             $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
             $strErrorHeader = HTTP_ERROR_500;

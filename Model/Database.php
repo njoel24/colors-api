@@ -35,8 +35,9 @@ class Database
             $stmt = $this->executeStatement( $query , $types, $params );
             $stmt->close();
         } catch(Exception $e) {
-            throw New Exception( $e->getMessage() );
+            return false;
         }
+        return true;
     }
  
     private function executeStatement($query = "" , $types="i", $params = [])
